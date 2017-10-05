@@ -1,0 +1,11 @@
+[0m[[0minfo[0m] [0m[32mGameSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mWhen it is the player's turn, the enemy [0m[0m
+[0m[[0minfo[0m] [0m[32m- should be attacked[0m[0m
+[0m[[0minfo[0m] [0m[32mWhen it is the enemy's turn, the player [0m[0m
+[0m[[0minfo[0m] [0m[32m- should be attacked[0m[0m
+[0m[[0minfo[0m] [0m[32mWhen the player is prompted to heal and says Yes, they [0m[0m
+[0m[[0minfo[0m] [0m[32m- should be healed back to full health[0m[0m
+[0m[[0minfo[0m] [0m[32mWhen the player is prompted to heal and says No, they [0m[0m
+[0m[[0minfo[0m] [0m[32m- should remain at the same health[0m[0m
+[0m[[0minfo[0m] [0m[32mWhen the player is prompted to heal and their response is neither Yes or No, they [0m[0m
+[0m[[0minfo[0m] [0m[32m- should remain at the same health[0m[0m
