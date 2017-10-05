@@ -2,8 +2,8 @@ package GameFixtures
 import game._
 
 object GameFixtures {
-  val player = new Player("Stuart", "Human", 100, "Mace")
-  val enemy = new Enemy("Bob", "Orc", 20, "Warhammer")
+  val player = new Player("Stuart", "Human", 100, Mace)
+  val enemy = new Enemy("Bob", "Orc", 20, Warhammer)
 
   var healthPotions = 3
 
@@ -24,7 +24,7 @@ object GameFixtures {
     damage
   }
 
-  def yesHeal(playerHealth:Int, healthPot:Int):Int = {
+  def heal(playerHealth:Int, healthPot:Int):Int = {
     var healthPotion = healthPot
 
     var playerHealth = 50
@@ -35,10 +35,18 @@ object GameFixtures {
     playerHealth
   }
 
-  def noHeal(playerHealth:Int):Int = {
-    println(s"You still have ${Console.GREEN}($playerHealth health)${Console.RESET}")
-
-    playerHealth
+  def receiveFreeHealthPotion(noOfKills:Int, healthPotions:Int):Int = {
+    var healthPots = healthPotions
+    if (noOfKills % 5 == 0 && noOfKills != 0)
+      {
+        println(s"For killing 5 enemies without dying you have been awarded an extra health potion, you now have ${Console.GREEN}($healthPots)${Console.RESET}")
+        scala.io.StdIn.readLine()
+        healthPots
+      }
+    else
+      {
+        0
+      }
   }
 
 
