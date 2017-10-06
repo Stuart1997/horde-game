@@ -6,10 +6,10 @@ import scala.io.{BufferedSource, Source}
 
 object GameMain extends App {
 
-  val nameList = List("Bob", "Fred", "Jim", "Harold", "Clive", "Brian")
-  val raceList = List("Human", "Orc", "Dwarf", "Elf", "Gnome", "Zombie")
+  val nameList = List("Bob", "Fred", "Jim", "Harold", "Clive", "Brian", "Vinnie", "Ted", "Gilbert", "Ed")
+  val raceList = List("Human", "Orc", "Dwarf", "Elf", "Gnome", "Zombie", "Troll", "Skeleton")
   val hpList = List(10, 12, 15, 18, 20)
-  val weaponList = List(Longsword, Mace, Warhammer, Axe, Spear, Maul, Dagger)
+  val weaponList = List(Longsword, Mace, Warhammer, Axe, Spear, Maul, Scimitar)
   val random = scala.util.Random
 
   //val userName = scala.io.StdIn.readLine("What is your name?")
@@ -57,7 +57,7 @@ object GameMain extends App {
         }
       }
 
-      if (killCount % 5 == 0 && killCount != 0)
+      if (killCount % 5 == 0 && killCount != 0 && player.health > 0)
       {
         healthPotions += 1
         println(s"For killing 5 enemies without dying you have been awarded an extra health potion, you now have ${Console.GREEN}($healthPotions)${Console.RESET}")
@@ -130,7 +130,24 @@ sealed trait Weapon
   val damageModifier:Int
   def weaponDamage:Int =
   {
-    random.nextInt(damageModifier + 1)
+    val normalDamage = random.nextInt(damageModifier + 1)
+
+    if (normalDamage == damageModifier) {
+      val critChance = random.nextInt(2)
+      if (critChance == 1)
+      {
+        val critDamage = normalDamage * 2
+        critDamage
+      }
+      else
+      {
+        normalDamage
+      }
+    }
+    else
+    {
+      normalDamage
+    }
   }
 }
 
@@ -158,9 +175,9 @@ case object Longsword extends Weapon
 {
   val damageModifier:Int = 10
 }
-  case object Dagger extends Weapon
+  case object Scimitar extends Weapon
 {
-  val damageModifier:Int = 4
+  val damageModifier:Int = 6
 }
 
 trait Character {
@@ -180,6 +197,10 @@ trait Character {
     {
       println(s"${Console.BLUE}Miss!${Console.RESET}")
     }
+    else if (damage > 10)
+      {
+        println(s"${Console.YELLOW}${Console.GREEN_B}CRIT!${Console.RESET} $damage damage, ${character.name} now has ${character.playerColour}($enemyHealthPoints health)${Console.RESET}")
+      }
     else
     {
       println(s"${Console.YELLOW}Hit!${Console.RESET} $damage damage, ${character.name} now has ${character.playerColour}($enemyHealthPoints health)${Console.RESET}")
