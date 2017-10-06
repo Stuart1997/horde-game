@@ -12,8 +12,9 @@ object GameMain extends App {
   val weaponList = List(Longsword, Mace, Warhammer, Axe, Spear, Maul, Dagger)
   val random = scala.util.Random
 
-  val player = new Player("Stuart", "Human", 50, Mace)
-
+  //val userName = scala.io.StdIn.readLine("What is your name?")
+  //val userWeapon = scala.io.StdIn.readLine("What weapon would you like to use?")
+  val player = new Player("Stuart", "Human", 50, weaponList(random.nextInt(7)))
 
 
   //scala.io.StdIn.readLine("You come across two enemies, press enter to roll initiative")
@@ -27,7 +28,7 @@ object GameMain extends App {
       val enemy = new Enemy(nameList(random.nextInt(6)), raceList(random.nextInt(6)),
         hpList(random.nextInt(5)), weaponList(random.nextInt(7)))
 
-      println("AN ENEMY APPEARS")
+      println(s"AN ENEMY APPEARS - ${enemy.name} the ${enemy.race} (${enemy.health} health) equipped with: ${enemy.weapon}")
       scala.io.StdIn.readLine()
 
       while (player.health > 0 && enemy.health > 0)
@@ -90,13 +91,13 @@ object GameMain extends App {
   var score = killScore + hpScore
 
   val pw = new PrintWriter(new FileOutputStream(new File("HordeLeaderboard.txt"),true))
-  if (score >= 10)
+  if (score >= 100)
     {
       println(s"Final score = $score")
       println(s"($killCount kills = $killScore, $healthPotions health potions remaining = $hpScore)")
       println()
 
-      var scoreForLeaderboard = player.name + " = " + score
+      var scoreForLeaderboard = s"${player.name} (${player.weapon}) = $score"
       pw.println(scoreForLeaderboard)
       scala.io.StdIn.readLine("Press enter to view the leaderboard")
       println()
