@@ -20,7 +20,9 @@ class GameSpec extends FlatSpec with Matchers {
   }
 
   "When the player has killed 5 enemies they " should " receive a health potion" in {
+    val currentHealthPots = GameFixtures.receiveFreeHealthPotion(5, 3)
 
+    currentHealthPots should be (4)
   }
 
 }

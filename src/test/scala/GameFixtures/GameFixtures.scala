@@ -40,8 +40,7 @@ object GameFixtures {
     if (noOfKills % 5 == 0 && noOfKills != 0)
       {
         println(s"For killing 5 enemies without dying you have been awarded an extra health potion, you now have ${Console.GREEN}($healthPots)${Console.RESET}")
-        scala.io.StdIn.readLine()
-        healthPots
+        healthPots + 1
       }
     else
       {
