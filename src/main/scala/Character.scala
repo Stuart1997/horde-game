@@ -13,7 +13,7 @@ trait Character {
     val random = scala.util.Random
     val damage = weapon.weaponDamage
 
-    println(s"Attacking ${character.name} the ${character.race} ${character.playerColour}(${character.health} health)${Console.RESET} with $weapon")
+    println(s"Attacking ${character.name} ${character.race} ${character.playerColour}(${character.health} health)${Console.RESET} with $weapon")
     var enemyHealthPoints = character.health - damage
     if (damage == 0) {
       println(s"${Console.BLUE}Miss!${Console.RESET}")

@@ -15,18 +15,16 @@ object scoring {
   //TODO separate the remove if from the write method, create another method for less than 100
   def writeToLeaderboardFile(): Unit = {
     val pw = new PrintWriter(new FileOutputStream(new File("HordeLeaderboard.txt"), true))
-    if (score >= 100) {
-      println(s"Final score = $score")
-      println(s"($killCount kills = $killScore, $healthPotions health potions remaining = $hpScore)")
-      println()
+    println(s"Final score = $score")
+    println(s"($killCount total kills = $killScore, $bossKillCount boss kills = $bossKillScore, $healthPotions health potions remaining = $hpScore)")
+    println()
 
+    if (score >= 100) {
       val scoreForLeaderboard = s"${player.name} (${player.weapon}) = $score"
       pw.println(scoreForLeaderboard)
       scala.io.StdIn.readLine("Press enter to view the leaderboard \n")
     }
     else {
-      println(s"Final score = $score")
-      println(s"($killCount kills = $killScore, $healthPotions health potions remaining = $hpScore)")
       println("Unfortunately your score was not high enough for the leaderboard, press enter to view the leaderboard")
       scala.io.StdIn.readLine()
     }
