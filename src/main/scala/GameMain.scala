@@ -19,7 +19,8 @@ object GameMain extends App with Methods{
 
   //val userName = scala.io.StdIn.readLine("What is your name? ")
   //val userWeapon = scala.io.StdIn.readLine("What weapon would you like to use?")
-  val player = new Player("Stuart", "the Human", 50, weaponList(random.nextInt(7)))
+  //TODO make the random.nextInts into the List.length rather than a hardcoded number
+  val player = new Player("Stuart", "the Human", 50, weaponList(random.nextInt(weaponList.length)))
 
   var healthPotions = 3
   var killCount = 0
@@ -27,8 +28,8 @@ object GameMain extends App with Methods{
   var continue = true
 
   while (continue) {
-
-    determineBossChance(killCount)
+    val isItABoss = determineBossChance(killCount)
+    spawnEnemy(isItABoss)
 
     healthPotions += receiveFreeHealthPotion(killCount, player.health, healthPotions)
     healthPotions -= promptHealingOpportunity(healthPotions)
@@ -36,10 +37,11 @@ object GameMain extends App with Methods{
   scoring.writeToLeaderboardFile()
 }
 
+/*
 object methods {
   def rollInitiative: Int = {
     val random = scala.util.Random
     val initiative = random.nextInt(19) + 1
     initiative
   }
-}
+}*/

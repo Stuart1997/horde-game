@@ -5,7 +5,7 @@ import characterFile._
 import weaponFile._
 
 trait Methods {
-  def determineBossChance(killCount:Int): Unit = {
+  def determineBossChance(killCount:Int): Boolean = {
     var isItABoss = false
 
     if (killCount >= 10) {
@@ -13,23 +13,27 @@ trait Methods {
 
       if (bossChance == 1) {
         isItABoss = true
+        isItABoss
       }
       else {
         isItABoss = false
+        isItABoss
       }
     }
     else {
       isItABoss = false
+      isItABoss
     }
+  }
 
+  def spawnEnemy(isItABoss:Boolean): Unit = {
     if (isItABoss) {
-      val bossName = nameList(random.nextInt(10)) + adjectives(random.nextInt(8))
-      val bossRace = bosses(random.nextInt(7))
-      combatScenario(bossName, bossRace, 30, Lance)
+      val bossName = nameList(random.nextInt(nameList.length)) + adjectives(random.nextInt(adjectives.length))
+      combatScenario(bossName, bosses(random.nextInt(bosses.length)), 30, Lance /*weaponList(random.nextInt(7))*/)
     }
     else {
-      combatScenario(nameList(random.nextInt(10)), raceList(random.nextInt(10)),
-        hpList(random.nextInt(5)), weaponList(random.nextInt(7)))
+      combatScenario(nameList(random.nextInt(nameList.length)), raceList(random.nextInt(raceList.length)),
+        hpList(random.nextInt(hpList.length)), weaponList(random.nextInt(weaponList.length)))
     }
   }
 
@@ -38,6 +42,8 @@ trait Methods {
 
     if (enemy.health > 20) {
       println(s"${Console.RED}A BOSS STANDS BEFORE YOU - ${enemy.name} ${enemy.race} (${enemy.health} health)${Console.RESET}")
+      //TODO the below makes me change the weapon modifiers to var, should I? If so, change bossKillCount
+      //enemy.weapon.damageModifier = 12
     }
     else {
       println(s"AN ENEMY APPEARS - ${enemy.name} ${enemy.race} (${enemy.health} health) equipped with: " +
@@ -53,14 +59,18 @@ trait Methods {
       if (enemy.health <= 0) {
         enemy.health = 0
 
+        println(s"${Console.RED}${enemy.name} ${enemy.race} is dead!${Console.RESET}")
+
         if (enemy.weapon == Lance) {
           bossKillCount += 1
           killCount += 1
+          healthPotions += 1
+          println(s"You have been awarded a health potion for defeating a boss, you now have ${Console.GREEN}($healthPotions)${Console.RESET}")
         }
         else {
           killCount += 1
         }
-        println(s"${Console.RED}${enemy.name} ${enemy.race} is dead! You now have $killCount kills.${Console.RESET}")
+        println(s"You now have $killCount kills.")
         scala.io.StdIn.readLine()
       }
       else {

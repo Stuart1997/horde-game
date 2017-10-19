@@ -2,6 +2,7 @@ package GameFixtures
 import game._
 import weaponFile._
 import characterFile._
+import game.GameMain._
 
 object GameFixtures {
   val player = new Player("Stuart", "Human", 100, Mace)
@@ -67,4 +68,87 @@ object GameFixtures {
     }
     damage
   }
+
+
+
+
+
+
+
+  def determineBossChance(killCount:Int): Unit = {
+    var isItABoss = false
+
+    if (killCount >= 10) {
+      val bossChance = random.nextInt(1)
+
+      if (bossChance == 1) {
+        isItABoss = true
+      }
+      else {
+        isItABoss = false
+      }
+    }
+    else {
+      isItABoss = false
+    }
+
+    if (isItABoss) {
+      val bossName = nameList(random.nextInt(10)) + adjectives(random.nextInt(8))
+      val bossRace = bosses(random.nextInt(7))
+      combatScenario("Bob the Grotesque", "Mutant", 30, Lance)
+    }
+    else {
+      combatScenario(nameList(random.nextInt(10)), raceList(random.nextInt(10)),
+        hpList(random.nextInt(5)), weaponList(random.nextInt(7)))
+    }
+  }
+
+  def combatScenario(Name: String, Race: String, HP: Int, Weapon: Weapon): Unit = {
+    val enemy = new Enemy(Name, Race, HP, Weapon)
+
+    if (enemy.health > 20) {
+      println(s"${Console.RED}A BOSS STANDS BEFORE YOU - ${enemy.name} ${enemy.race} (${enemy.health} health)${Console.RESET}")
+    }
+    else {
+      println(s"AN ENEMY APPEARS - ${enemy.name} ${enemy.race} (${enemy.health} health) equipped with: " +
+        s"${enemy.weapon}")
+    }
+
+    scala.io.StdIn.readLine()
+
+    while (player.health > 0 && enemy.health > 0) {
+      enemy.health -= player.attack(character = enemy)
+      scala.io.StdIn.readLine()
+
+      if (enemy.health <= 0) {
+        enemy.health = 0
+
+        if (enemy.weapon == Lance) {
+          bossKillCount += 1
+          killCount += 1
+        }
+        else {
+          killCount += 1
+        }
+        println(s"${Console.RED}${enemy.name} ${enemy.race} is dead! You now have $killCount kills.${Console.RESET}")
+        scala.io.StdIn.readLine()
+      }
+      else {
+        player.health -= enemy.attack(character = player)
+        if (player.health <= 0) {
+          player.health = 0
+          println()
+          println(s"${Console.RED}Oh dear, you are dead!${Console.RESET}")
+          continue = false
+        }
+        scala.io.StdIn.readLine()
+      }
+    }
+  }
+
+
+
+
+
+
 }
