@@ -2,6 +2,10 @@ package game
 
 import java.io.{File, FileInputStream, FileOutputStream, PrintWriter}
 
+import weaponFile._
+import characterFile._
+import scoringFile._
+
 import scala.io.{BufferedSource, Source}
 
 object GameMain extends App {
@@ -21,6 +25,7 @@ object GameMain extends App {
 
   var healthPotions = 3
   var killCount = 0
+  var bossKillCount = 0
   var continue = true
   while (continue) {
     var isItABoss = false
@@ -39,7 +44,7 @@ object GameMain extends App {
       isItABoss = false
     }
 
-    if (isItABoss == true) {
+    if (isItABoss) {
       val bossName = nameList(random.nextInt(10)) + adjectives(random.nextInt(8))
       val bossRace = bosses(random.nextInt(7))
       combatScenario(bossName, bossRace, 30, Lance)
@@ -91,7 +96,12 @@ object GameMain extends App {
         if (enemy.health <= 0) {
           enemy.health = 0
           println(s"${Console.RED}${enemy.name} is dead!${Console.RESET}")
-          killCount += 1
+          if (enemy.weapon == Lance) {
+              bossKillCount += 1
+            }
+          else {
+            killCount += 1
+          }
           scala.io.StdIn.readLine()
         }
         else {
@@ -108,143 +118,14 @@ object GameMain extends App {
     }
   }
 
-  var killScore = killCount * 10
-  var hpScore = healthPotions * 5
-  var score = killScore + hpScore
+  scoring.writeToLeaderboardFile()
 
-  val pw = new PrintWriter(new FileOutputStream(new File("HordeLeaderboard.txt"), true))
-  if (score >= 100) {
-    println(s"Final score = $score")
-    println(s"($killCount kills = $killScore, $healthPotions health potions remaining = $hpScore)")
-    println()
-
-    var scoreForLeaderboard = s"${player.name} (${player.weapon}) = $score"
-    pw.println(scoreForLeaderboard)
-    scala.io.StdIn.readLine("Press enter to view the leaderboard")
-    println()
-  }
-  else {
-    println(s"Final score = $score")
-    println(s"($killCount kills = $killScore, $healthPotions health potions remaining = $hpScore)")
-    println("Unfortunately your score was not high enough for the leaderboard, press enter to view the leaderboard")
-    scala.io.StdIn.readLine()
-  }
-  pw.close()
-
-
-  println("LEADERBOARD")
-  //Read all
-  val source = new BufferedSource(new FileInputStream("HordeLeaderboard.txt"))
-  //Finds number at the end of line
-  val regex = "([0-9]+)$".r
-  //Go through line by line, construct tuple of the string and then the number at the end of the string
-  val leaderboardScore = source.getLines().map { x => (x, regex.findAllIn(x).toList.head.toInt) }.toList
-  //Sort the tuple based on the score, descending, print (_: goes through all tuples which are strings/ints
-  //_2 looks only at ints, reverse as it is low - high by default
-  //Each tuple has been assigned a value, and then scores are ordered by tuple value by printing the string (._1)
-  leaderboardScore.sorted(Ordering.by((_: (String, Int))._2).reverse).foreach(x => println(x._1))
 }
 
-sealed trait Weapon {
-  val random = scala.util.Random
-  val damageModifier: Int
 
-  def weaponDamage: Int = {
-    val normalDamage = random.nextInt(damageModifier + 1)
 
-    if (normalDamage == damageModifier) {
-      val critChance = random.nextInt(4)
-      if (critChance == 1) {
-        val critDamage = normalDamage * 2
-        critDamage
-      }
-      else {
-        normalDamage
-      }
-    }
-    else {
-      normalDamage
-    }
-  }
-}
 
-case object Longsword extends Weapon {
-  val damageModifier: Int = 8
-}
 
-case object Mace extends Weapon {
-  val damageModifier: Int = 6
-}
-
-case object Warhammer extends Weapon {
-  val damageModifier: Int = 8
-}
-
-case object Axe extends Weapon {
-  val damageModifier: Int = 8
-}
-
-case object Spear extends Weapon {
-  val damageModifier: Int = 6
-}
-
-case object Maul extends Weapon {
-  val damageModifier: Int = 10
-}
-
-case object Scimitar extends Weapon {
-  val damageModifier: Int = 6
-}
-
-case object Lance extends Weapon {
-  val damageModifier: Int = 12
-}
-
-trait Character {
-  var name: String
-  var race: String
-  var health: Int
-  var weapon: Weapon
-  val playerColour: String
-
-  def attack(character: Character): Int = {
-    val random = scala.util.Random
-    val damage = weapon.weaponDamage
-
-    println(s"Attacking ${character.name} the ${character.race} ${character.playerColour}(${character.health} health)${Console.RESET} with $weapon")
-    var enemyHealthPoints = character.health - damage
-    if (damage == 0) {
-      println(s"${Console.BLUE}Miss!${Console.RESET}")
-    }
-    else if (damage > 10) {
-      println(s"${Console.YELLOW}CRIT!${Console.RESET} $damage damage, ${character.name} now has ${character.playerColour}($enemyHealthPoints health)${Console.RESET}")
-    }
-    else {
-      println(s"${Console.YELLOW}Hit!${Console.RESET} $damage damage, ${character.name} now has ${character.playerColour}($enemyHealthPoints health)${Console.RESET}")
-    }
-    damage
-  }
-}
-
-class Player(var name: String, var race: String, var health: Int, var weapon: Weapon) extends Character {
-  override val playerColour: String = Console.GREEN
-
-  def heal(playerHealth: Int, healthPot: Int): Int = {
-    var healthPotion = healthPot
-
-    var playerHealth = 50
-    healthPotion = healthPotion - 1
-
-    println(s"You are now back to $playerColour($playerHealth health)${Console.RESET} and have $playerColour($healthPotion health potions)${Console.RESET} left")
-
-    scala.io.StdIn.readLine()
-    playerHealth
-  }
-}
-
-class Enemy(var name: String, var race: String, var health: Int, var weapon: Weapon) extends Character {
-  override val playerColour: String = Console.RED
-}
 
 object methods {
   def rollInitiative: Int = {

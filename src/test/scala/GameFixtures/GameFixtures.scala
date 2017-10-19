@@ -1,5 +1,7 @@
 package GameFixtures
 import game._
+import weaponFile._
+import characterFile._
 
 object GameFixtures {
   val player = new Player("Stuart", "Human", 100, Mace)
