@@ -23,15 +23,13 @@ trait Weapon {
   }
 }
 
-
-//TODO Make weapon = 12 damage if it's a boss, no matter the weapon
-
+//TODO Make weapon = 12 damage if it's a boss, no matter the weapon, change to vars to allow it?
 case object Longsword extends Weapon {
-  val damageModifier: Int = 8
+  val damageModifier: Int = 6
 }
 
 case object Mace extends Weapon {
-  val damageModifier: Int = 6
+  val damageModifier: Int = 8
 }
 
 case object Warhammer extends Weapon {

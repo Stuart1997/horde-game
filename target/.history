@@ -1,0 +1,6 @@
+test
+clean update compile
+clean
+update
+compile
+run

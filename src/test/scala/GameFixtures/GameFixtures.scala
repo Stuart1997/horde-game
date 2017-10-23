@@ -5,8 +5,8 @@ import characterFile._
 import game.GameMain._
 
 object GameFixtures {
-  val player = new Player("Stuart", "Human", 100, Mace)
-  val enemy = new Enemy("Bob", "Orc", 20, Warhammer)
+  val player = new Player("Stuart", "the Human", 50, Mace)
+  val enemy = new Enemy("Bob", "the Orc", 20, Warhammer)
 
   var healthPotions = 3
 
@@ -27,30 +27,54 @@ object GameFixtures {
     damage
   }
 
-  def heal(playerHealth:Int, healthPot:Int):Int = {
-    var healthPotion = healthPot
-
-    var playerHealth = 50
-    healthPotion = healthPotion - 1
-
-    println(s"You are now back to ${Console.GREEN}($playerHealth health)${Console.RESET} and have ${Console.GREEN}($healthPotion health potions)${Console.RESET} left")
-
-    playerHealth
+  def promptHealingOpportunity(playerHealth:Int, healthPotions: Int): Boolean = {
+    var wouldYouLikeToHeal = false  //TODO VAR
+    if (player.health > 0 && healthPotions > 0) {
+      println(s"Would you like to heal? ${Console.GREEN}(${player.health} health) ($healthPotions health potions)${Console.RESET}")
+      val decision = "Yes"
+      if (decision.startsWith("Y")) {
+        //player.health = player.heal(player.health, healthPotions)
+        wouldYouLikeToHeal = true
+        wouldYouLikeToHeal
+      }
+      else if (decision == "No") {
+        println(s"You remain at (${Console.GREEN}${player.health} health${Console.RESET})")
+        wouldYouLikeToHeal
+      }
+      else {
+        println("Invalid response, you have missed your healing opportunity")
+        wouldYouLikeToHeal
+      }
+    }
+    else {
+      wouldYouLikeToHeal
+    }
   }
 
-  def receiveFreeHealthPotion(noOfKills:Int, healthPotions:Int):Int = {
-    var healthPots = healthPotions
-    if (noOfKills % 5 == 0 && noOfKills != 0)
-      {
-        println(s"For killing 5 enemies without dying you have been awarded an extra health potion, you now have ${Console.GREEN}($healthPots)${Console.RESET}")
-        healthPots + 1
-      }
-    else
-      {
-        0
-      }
+  def healPlayer(wouldYouLikeToHeal:Boolean, playerHealth:Int, healthPotions:Int):Unit = {
+    if (wouldYouLikeToHeal) {
+      //TODO change the values without making them
+      //playerHealth = 50
+      //healthPotions -= 1
+      println(s"You are now back to ${Console.GREEN}($playerHealth health)${Console.RESET} and have ${Console.GREEN}($healthPotions health potions)${Console.RESET} left")
+    }
+    else {
+      println(s"You remain at (${Console.GREEN}$playerHealth health${Console.RESET})")
+    }
   }
 
+
+  /*def receiveFreeHealthPotion(killCount:Int, playerHealth:Int, healthPotions:Int):Int = {
+    if (killCount % 5 == 0 && killCount != 0 && playerHealth > 0) {
+      val healthPots = healthPotions + 1
+      println(s"For killing 5 enemies without dying you have been awarded an extra health potion, you now have ${Console.GREEN}($healthPots)${Console.RESET}")
+      scala.io.StdIn.readLine()
+      1
+    }
+    else {
+      0
+    }
+  }*/
 
   def enemyAttackingPlayer(playerName:String, playerHealth:Int):Int = {
     val random = scala.util.Random
@@ -68,12 +92,6 @@ object GameFixtures {
     }
     damage
   }
-
-
-
-
-
-
 
   def determineBossChance(killCount:Int): Unit = {
     var isItABoss = false

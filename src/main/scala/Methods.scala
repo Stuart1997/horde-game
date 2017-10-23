@@ -5,10 +5,10 @@ import characterFile._
 import weaponFile._
 
 trait Methods {
-  def determineBossChance(killCount:Int): Boolean = {
+  def determineBossChance(killCount: Int): Boolean = {
     var isItABoss = false
 
-    if (killCount >= 10) {
+    if (killCount > 10) {
       val bossChance = random.nextInt(9)
 
       if (bossChance == 1) {
@@ -26,7 +26,7 @@ trait Methods {
     }
   }
 
-  def spawnEnemy(isItABoss:Boolean): Unit = {
+  def spawnEnemy(isItABoss: Boolean): Unit = {
     if (isItABoss) {
       val bossName = nameList(random.nextInt(nameList.length)) + adjectives(random.nextInt(adjectives.length))
       combatScenario(bossName, bosses(random.nextInt(bosses.length)), 30, Lance /*weaponList(random.nextInt(7))*/)
@@ -86,7 +86,7 @@ trait Methods {
     }
   }
 
-  def receiveFreeHealthPotion(killCount:Int, playerHealth:Int, healthPotions:Int):Int = {
+  def receiveFreeHealthPotion(killCount: Int, playerHealth: Int, healthPotions: Int): Int = {
     if (killCount % 5 == 0 && killCount != 0 && playerHealth > 0) {
       val healthPots = healthPotions + 1
       println(s"For killing 5 enemies without dying you have been awarded an extra health potion, you now have ${Console.GREEN}($healthPots)${Console.RESET}")
@@ -98,10 +98,10 @@ trait Methods {
     }
   }
 
-  def promptHealingOpportunity(healthPotions:Int):Int = {
+  def promptHealingOpportunity(healthPotions: Int): Int = {
     if (player.health > 0 && healthPotions > 0) {
       val decision = scala.io.StdIn.readLine(s"Would you like to heal? ${Console.GREEN}(${player.health} health) ($healthPotions health potions)${Console.RESET} ").capitalize
-      if (decision == "Yes" || decision.startsWith("Y")) {
+      if (decision.startsWith("Y")) {
         player.health = player.heal(player.health, healthPotions)
         1
       }

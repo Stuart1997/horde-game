@@ -12,7 +12,6 @@ object scoring {
   val hpScore = healthPotions * 5
   val score = killScore + hpScore + bossKillScore
 
-  //TODO separate the remove if from the write method, create another method for less than 100
   def writeToLeaderboardFile(): Unit = {
     val pw = new PrintWriter(new FileOutputStream(new File("HordeLeaderboard.txt"), true))
     println(s"Final score = $score")

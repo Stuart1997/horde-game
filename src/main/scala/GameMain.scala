@@ -5,11 +5,11 @@ import characterFile._
 import scoringFile._
 import methodFile._
 
-object GameMain extends App with Methods{
+object GameMain extends App with Methods {
 
   val nameList = List("Bob", "Fred", "Jim", "Harold", "Clive", "Brian", "Vinnie", "Ted", "Gilbert", "Ed")
   val raceList = List("the Human", "the Orc", "the Dwarf", "the Elf", "the Gnome", "the Zombie",
-                      "the Troll", "the Skeleton", "the Vampire", "the Werewolf")
+    "the Troll", "the Skeleton", "the Vampire", "the Werewolf")
   val hpList = List(10, 12, 15, 18, 20)
   val weaponList = List(Longsword, Mace, Warhammer, Axe, Spear, Maul, Scimitar)
   val adjectives = List(" the Grotesque", " the Horrifying", " the Disgusting", " the Murderous",
@@ -19,7 +19,6 @@ object GameMain extends App with Methods{
 
   //val userName = scala.io.StdIn.readLine("What is your name? ")
   //val userWeapon = scala.io.StdIn.readLine("What weapon would you like to use?")
-  //TODO make the random.nextInts into the List.length rather than a hardcoded number
   val player = new Player("Stuart", "the Human", 50, weaponList(random.nextInt(weaponList.length)))
 
   var healthPotions = 3
