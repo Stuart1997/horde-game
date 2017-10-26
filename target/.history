@@ -4,3 +4,7 @@ clean
 update
 compile
 run
+clean
+compile
+run
+test

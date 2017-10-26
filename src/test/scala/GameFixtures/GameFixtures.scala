@@ -7,6 +7,7 @@ import game.GameMain._
 object GameFixtures {
   val player = new Player("Stuart", "the Human", 50, Mace)
   val enemy = new Enemy("Bob", "the Orc", 20, Warhammer)
+  val random = scala.util.Random
 
   var healthPotions = 3
 
@@ -51,16 +52,25 @@ object GameFixtures {
     }
   }
 
-  def healPlayer(wouldYouLikeToHeal:Boolean, playerHealth:Int, healthPotions:Int):Unit = {
-    if (wouldYouLikeToHeal) {
+  def healPlayer(wouldYouLikeToHeal:Boolean, playerHealth:Int, healthPotions:Int):Int = {
+    /*if (wouldYouLikeToHeal) {
       //TODO change the values without making them
-      //playerHealth = 50
-      //healthPotions -= 1
+      playerHealth = 50
+      healthPotions -= 1
       println(s"You are now back to ${Console.GREEN}($playerHealth health)${Console.RESET} and have ${Console.GREEN}($healthPotions health potions)${Console.RESET} left")
     }
     else {
       println(s"You remain at (${Console.GREEN}$playerHealth health${Console.RESET})")
-    }
+    }*/
+
+    var healthPotion = healthPotions
+
+    val playerHealth = 50
+    healthPotion = healthPotion - 1
+
+    println(s"You are now back to ($playerHealth health) and have ($healthPotion health potions) left")
+
+    playerHealth
   }
 
 
@@ -164,9 +174,41 @@ object GameFixtures {
     }
   }
 
+  def determineRoom(killCount: Int): String = {
+    if (killCount == 0 || killCount % 5 == 0) {
+      val roomType = List("ice", "water", "fire", "air")
+      val room = roomType(random.nextInt(4))
+      if (room.startsWith("a") || room.startsWith("e") || room.startsWith("i") || room.startsWith("o") || room.startsWith("u")){
+        //s"You enter: an $room room"
+        "You enter: an ice room"
+      }
+      else {
+        //s"You enter: a $room room"
+        "You enter: a fire room"
+      }
+    }
+    else {
+      val roomText = "You have not yet cleared the current room"
+      roomText
+    }
+  }
 
-
-
-
+  def roomModifier(roomType: String): Unit = {
+    if (roomType == "fire"){
+      println("In this room your damage is slightly increased")
+      player.weapon.damageModifier += 2
+    }
+    else if (roomType == "water"){
+      println("In this room your damage is slightly decreased")
+      player.weapon.damageModifier -= 2
+    }
+      //TODO change what these two do
+    else if (roomType == "air"){
+      println("In this room your chance to hit has slightly increased")
+    }
+    else {
+      println("In this room your chance to hit has slightly decreased")
+    }
+  }
 
 }

@@ -88,6 +88,7 @@ trait Methods {
 
   def receiveFreeHealthPotion(killCount: Int, playerHealth: Int, healthPotions: Int): Int = {
     if (killCount % 5 == 0 && killCount != 0 && playerHealth > 0) {
+      //TODO Want to just increment this by 1 and make it change the number of health potions in the main program
       val healthPots = healthPotions + 1
       println(s"For killing 5 enemies without dying you have been awarded an extra health potion, you now have ${Console.GREEN}($healthPots)${Console.RESET}")
       scala.io.StdIn.readLine()

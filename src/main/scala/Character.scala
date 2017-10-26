@@ -19,6 +19,7 @@ trait Character {
     if (damage == 0) {
       println(s"${Console.BLUE}Miss!${Console.RESET}")
     }
+      //TODO change this because, with rooms, damage can be over 10 without it being a crit
     else if (damage > 10) {
       println(s"${Console.YELLOW}CRIT!${Console.RESET} $damage damage, ${character.name} now has ${character.playerColour}($enemyHealthPoints health)${Console.RESET}")
     }

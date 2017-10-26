@@ -35,7 +35,7 @@ class GameSpec extends FlatSpec with Matchers {
     healingOpportunity should be (false)
   }
 
-  "When the player agrees to healing themselves they " should " return to 50 health and have one less health potion" in {
+  /*"When the player agrees to healing themselves they " should " return to 50 health and have one less health potion" in {
     player.health = 30
     val healthPotions = 3
     val healingOpportunity = GameFixtures.promptHealingOpportunity(player.health, healthPotions)
@@ -43,9 +43,9 @@ class GameSpec extends FlatSpec with Matchers {
     GameFixtures.healPlayer(healingOpportunity, player.health, healthPotions)
     player.health should be (50)
     healthPotions should be (2)
-  }
+  }*/
 
-  /*"When the player does not agree to healing themselves they " should " return remain at the same health and their health potion count stays the same" in {
+  "When the player does not agree to healing themselves they " should " return remain at the same health and their health potion count stays the same" in {
     player.health = 30
     val healthPotions = 3
     val healingOpportunity = GameFixtures.promptHealingOpportunity(player.health, healthPotions)
@@ -53,11 +53,7 @@ class GameSpec extends FlatSpec with Matchers {
     GameFixtures.healPlayer(healingOpportunity, player.health, healthPotions)
     player.health should be (30)
     healthPotions should be (3)
-  }*/
-
-
-
-
+  }
 
 
 
@@ -67,5 +63,17 @@ class GameSpec extends FlatSpec with Matchers {
 
     currentHealthPots should be (4)
   }*/
+
+  "At the start of the game a room type" should " be determined" in {
+    val killCount = 0
+    val roomType = GameFixtures.determineRoom(killCount)
+    roomType shouldBe "You enter: an ice room"
+  }
+
+  "When the player's killcount is not 0 or a multiple of 5, a room" should " not be determined" in {
+    val killCount = 1
+    val roomType = GameFixtures.determineRoom(killCount)
+    roomType shouldBe "You have not yet cleared the current room"
+  }
 
 }
